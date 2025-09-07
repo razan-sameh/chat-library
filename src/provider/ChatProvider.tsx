@@ -1,0 +1,48 @@
+import React, { createContext, useContext } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ChatThemeProvider } from "./ChatThemeProvider.js";
+import { ChatApi, ChatUser } from "../content/types.js";
+
+const ChatApiContext = createContext<ChatApi | null>(null);
+const ChatUserContext = createContext<ChatUser | null>(null);
+
+export const useChatApi = () => {
+  const ctx = useContext(ChatApiContext);
+  if (!ctx) throw new Error("useChatApi must be used inside ChatProvider");
+  return ctx;
+};
+export const useChatUser = () => {
+  const ctx = useContext(ChatUserContext);
+  if (!ctx) throw new Error("useChatUser must be used inside ChatProvider");
+  return ctx;
+};
+
+type ChatProviderProps = {
+  api: ChatApi;
+  user: ChatUser;
+  queryClient?: QueryClient;
+  theme?: Parameters<typeof ChatThemeProvider>[0]["theme"];
+  children?: React.ReactNode;
+};
+
+export const ChatProvider = ({
+  api,
+  user,
+  queryClient,
+  theme,
+  children,
+}: ChatProviderProps) => {
+  const client = queryClient ?? new QueryClient();
+
+  return (
+    <QueryClientProvider client={client}>
+      <ChatThemeProvider theme={theme ?? {}}>
+        <ChatApiContext.Provider value={api}>
+          <ChatUserContext.Provider value={user}>
+            {children}
+          </ChatUserContext.Provider>
+        </ChatApiContext.Provider>
+      </ChatThemeProvider>
+    </QueryClientProvider>
+  );
+};
