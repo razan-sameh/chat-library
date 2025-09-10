@@ -25,14 +25,18 @@ type ChatProviderProps = {
   children?: React.ReactNode;
 };
 
-export const ChatProvider = ({
+const ChatProvider = ({
   api,
   user,
   queryClient,
   theme,
   children,
 }: ChatProviderProps) => {
-  const client = queryClient ?? new QueryClient();
+  const client = queryClient ?? new QueryClient();  
+  // Ensure children is properly handled
+  if (!children) {
+    return null;
+  }
 
   return (
     <QueryClientProvider client={client}>
@@ -46,3 +50,4 @@ export const ChatProvider = ({
     </QueryClientProvider>
   );
 };
+export default ChatProvider;

@@ -1,0 +1,63 @@
+import { View, StyleSheet } from "react-native";
+import { useChatWindow } from "../../hooks/useChatWindow";
+import { useChatTheme } from "../../provider/ChatThemeProvider";
+import { enmMode } from "../../content/enums";
+import { InputBox } from "./InputBox";
+import { MessageList } from "./MessageList";
+
+type Props = {
+  chatId: string;
+  defaultMode?: enmMode;
+};
+
+const ChatWindow = ({ chatId, defaultMode = enmMode.popup }: Props) => {
+  const { messages, input, setInput, handleSend, userId } =
+    useChatWindow(chatId);
+  const theme = useChatTheme();
+    // Add error boundary for the hook
+  if (!messages || !userId) {
+    return (
+      <View style={[
+        defaultMode === enmMode.popup ? styles.popup : styles.screen,
+        { backgroundColor: theme.backgroundColor },
+      ]}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          {/* You might want to add a loading spinner here */}
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <View
+      style={[
+        defaultMode === enmMode.popup ? styles.popup : styles.screen,
+        { backgroundColor: theme.backgroundColor },
+      ]}
+    >
+      <MessageList messages={messages} userId={userId} />
+      <InputBox input={input} setInput={setInput} onSend={handleSend} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  popup: {
+    position: "absolute",
+    bottom: 80,
+    right: 20,
+    width: 300,
+    height: 400,
+    borderRadius: 8,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  screen: {
+    flex: 1,
+  },
+});
+export default ChatWindow

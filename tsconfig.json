@@ -4,15 +4,15 @@
     "outDir": "./dist",
 
     // Target/Module
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "target": "ES2017",            // safer for both web and RN
+    "module": "ESNext",            // Rollup will handle module bundling
+    "moduleResolution": "Node",    // Node resolution works better with rollup
 
     // React JSX
     "jsx": "react-jsx",
 
     // Types
-    "types": ["react", "react-dom", "react-native"],
+    "types": ["react", "react-native"],
 
     // Outputs
     "sourceMap": true,
@@ -32,8 +32,7 @@
     "skipLibCheck": true,
 
     // Isolation
-    "isolatedModules": true,
-    "moduleDetection": "force"
+    "isolatedModules": true
   },
-  "include": ["src", "src/index.ts"]
+  "include": ["src"]
 }

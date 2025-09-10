@@ -1,16 +1,19 @@
 // components/ChatLauncher.tsx
-import React, { useState } from "react";
-import { ChatWindow } from "./ChatWindow.js";
-import { useChatTheme } from "../provider/ChatThemeProvider.js";
+import { useState } from "react";
+import  ChatWindow  from "./ChatWindow";
+import { useChatTheme } from "../../provider/ChatThemeProvider";
+import { enmMode } from "../../content/enums";
 
 type Props = {
   chatId: string;
+  defaultMode?: enmMode; // Make it optional to match the main component
 };
 
-export const ChatLauncher = ({ chatId }: Props) => {
+const ChatLauncher = ({ chatId ,defaultMode = enmMode.popup}: Props) => {
   const [open, setOpen] = useState(false);
   const toggle = () => setOpen((o) => !o);
   const theme = useChatTheme();
+console.log('this is web');
 
   return (
     <>
@@ -35,7 +38,8 @@ export const ChatLauncher = ({ chatId }: Props) => {
         </button>
       </div>
 
-      {open && <ChatWindow chatId={chatId} />}
+      {open && <ChatWindow chatId={chatId} defaultMode={defaultMode}/>}
     </>
   );
 };
+export default ChatLauncher

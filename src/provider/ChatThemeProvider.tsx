@@ -28,9 +28,14 @@ type Props = {
 
 export const ChatThemeProvider = ({ theme = {}, children }: Props) => {
   const merged = { ...defaultTheme, ...theme };
+    // Ensure children is properly handled
+  if (!children) {
+    return null;
+  }
   return (
     <ChatThemeContext.Provider value={merged}>
       {children}
     </ChatThemeContext.Provider>
   );
 };
+export default ChatThemeProvider;
