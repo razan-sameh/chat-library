@@ -46,7 +46,7 @@ module.exports = [
         file: "dist/index.native.js", 
         format: "cjs", 
         sourcemap: true,
-        exports: "named" // Add this
+        exports: "named"
       },
       { 
         file: "dist/index.native.esm.js", 
@@ -54,13 +54,25 @@ module.exports = [
         sourcemap: true 
       }
     ],
-    external: ["react", "react-native", "@tanstack/react-query"],
+    external: [
+      "react", 
+      "react-native", 
+      "@tanstack/react-query",
+      // Make sure these are also external
+      "react/jsx-runtime",
+      "react-dom"
+    ],
     plugins: [
       resolve({ 
         preferBuiltins: false,
-        browser: false 
+        browser: false,
+        // Don't bundle React
+        dedupe: ['react', 'react-native']
       }), 
-      commonjs(), 
+      commonjs({
+        // Exclude React from bundling
+        exclude: ['react', 'react-native']
+      }), 
       typescript({ 
         tsconfig: "./tsconfig.json",
         declaration: false,
