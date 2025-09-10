@@ -32,11 +32,14 @@
   "dependencies": {
     "@tanstack/react-query": "^5.87.1",
     "axios": "^1.11.0",
+    "react-router-dom": "^7.8.2",
     "tslib": "^2.8.1"
   },
   "peerDependencies": {
     "react": ">=17",
-    "react-native": ">=0.70"
+    "react-native": ">=0.70",
+    "react-router-dom": ">=7.0.0",
+    "react-router": ">=7.0.0"
   },
   "peerDependenciesMeta": {
     "react": {

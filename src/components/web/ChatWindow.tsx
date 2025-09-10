@@ -3,14 +3,21 @@ import { useChatWindow } from "../../hooks/useChatWindow";
 import { useChatTheme } from "../../provider/ChatThemeProvider";
 import { InputBox } from "./InputBox";
 import { MessageList } from "./MessageList";
+import { useParams } from "react-router-dom";
 
 type Props = {
-  chatId: string;
-  defaultMode?:enmMode;
+  chatId?: string;
+  defaultMode?: enmMode;
 };
-const ChatWindow = ({ chatId, defaultMode = enmMode.popup }: Props) => {
-  const { messages, input, setInput, handleSend, userId } =
-    useChatWindow(chatId);
+const ChatWindow = ({
+  chatId: propChatId,
+  defaultMode = enmMode.popup,
+}: Props) => {
+  const { chatId: paramChatId } = useParams<{ chatId: string }>();
+  const chatId = propChatId || paramChatId;
+  const { messages, input, setInput, handleSend, userId } = useChatWindow(
+    chatId!
+  );
   const theme = useChatTheme();
   const style: React.CSSProperties =
     defaultMode === enmMode.popup
@@ -34,6 +41,8 @@ const ChatWindow = ({ chatId, defaultMode = enmMode.popup }: Props) => {
           flexDirection: "column",
           background: theme.backgroundColor,
           padding: 0,
+          height: "100vh",
+          width: "100vw",
         };
 
   return (
@@ -43,4 +52,4 @@ const ChatWindow = ({ chatId, defaultMode = enmMode.popup }: Props) => {
     </div>
   );
 };
-export default ChatWindow
+export default ChatWindow;

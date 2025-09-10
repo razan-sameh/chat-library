@@ -11,26 +11,33 @@ module.exports = [
   {
     input: "src/index.web.ts",
     output: [
-      { 
-        file: "dist/index.web.js", 
-        format: "cjs", 
+      {
+        file: "dist/index.web.js",
+        format: "cjs",
         sourcemap: true,
         exports: "named" // Add this
       },
-      { 
-        file: "dist/index.web.esm.js", 
-        format: "esm", 
-        sourcemap: true 
+      {
+        file: "dist/index.web.esm.js",
+        format: "esm",
+        sourcemap: true
       }
     ],
-    external: ["react", "react-dom", "@tanstack/react-query", "@mui/material/styles"], // Add MUI
+    external: [
+      "react",
+      "react-dom",
+      "react-router-dom",
+      "react-router",      // add this line
+      "@tanstack/react-query",
+      "@mui/material/styles"
+    ], 
     plugins: [
-      resolve({ 
+      resolve({
         browser: true,
-        preferBuiltins: false 
-      }), 
-      commonjs(), 
-      typescript({ 
+        preferBuiltins: false
+      }),
+      commonjs(),
+      typescript({
         tsconfig: "./tsconfig.json",
         declaration: false,
         declarationMap: false
@@ -42,38 +49,38 @@ module.exports = [
   {
     input: "src/index.native.ts",
     output: [
-      { 
-        file: "dist/index.native.js", 
-        format: "cjs", 
+      {
+        file: "dist/index.native.js",
+        format: "cjs",
         sourcemap: true,
         exports: "named"
       },
-      { 
-        file: "dist/index.native.esm.js", 
-        format: "esm", 
-        sourcemap: true 
+      {
+        file: "dist/index.native.esm.js",
+        format: "esm",
+        sourcemap: true
       }
     ],
     external: [
-      "react", 
-      "react-native", 
+      "react",
+      "react-native",
       "@tanstack/react-query",
       // Make sure these are also external
       "react/jsx-runtime",
       "react-dom"
     ],
     plugins: [
-      resolve({ 
+      resolve({
         preferBuiltins: false,
         browser: false,
         // Don't bundle React
         dedupe: ['react', 'react-native']
-      }), 
+      }),
       commonjs({
         // Exclude React from bundling
         exclude: ['react', 'react-native']
-      }), 
-      typescript({ 
+      }),
+      typescript({
         tsconfig: "./tsconfig.json",
         declaration: false,
         declarationMap: false

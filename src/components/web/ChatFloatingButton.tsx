@@ -16,7 +16,7 @@ const DefaultButton = () => (
   <span style={{ fontSize: "20px", color: "white" }}>💬</span>
 );
 
-const ChatLauncher = ({
+const ChatFloatingButton = ({
   chatId,
   defaultMode = enmMode.popup,
   buttonContainer,
@@ -68,4 +68,4 @@ const ChatLauncher = ({
   );
 };
 
-export default ChatLauncher;
+export default ChatFloatingButton;

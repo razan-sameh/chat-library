@@ -16,7 +16,7 @@ const DefaultButton = () => (
   <Text style={styles.buttonText}>💬</Text>
 );
 
-const ChatLauncher = ({
+const ChatFloatingButton = ({
   chatId,
   defaultMode = enmMode.fullscreen,
   buttonContainer: button,
@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChatLauncher;
+export default ChatFloatingButton;
