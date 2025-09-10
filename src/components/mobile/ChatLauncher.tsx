@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import React, { useState, ReactNode } from "react";
+import { View, Pressable, StyleSheet, ViewStyle, Text } from "react-native";
 import { useChatTheme } from "../../provider/ChatThemeProvider";
 import { enmMode } from "../../content/enums";
 import ChatWindow from "./ChatWindow";
@@ -7,27 +7,46 @@ import ChatWindow from "./ChatWindow";
 type Props = {
   chatId: string;
   defaultMode?: enmMode;
+  buttonContainer?: ReactNode; // custom content inside default Pressable
+  buttonStyle?: ViewStyle; // style for default Pressable
+  buttonComponent?: (toggle: () => void) => ReactNode; // full custom button
 };
+
+const DefaultButton = () => (
+  <Text style={styles.buttonText}>💬</Text>
+);
 
 const ChatLauncher = ({
   chatId,
-  defaultMode = enmMode.popup,
+  defaultMode = enmMode.fullscreen,
+  buttonContainer: button,
+  buttonStyle,
+  buttonComponent,
 }: Props) => {
-  console.log('this is mobile');
   const [open, setOpen] = useState(false);
   const toggle = () => setOpen((o) => !o);
   const theme = useChatTheme();
 
   return (
     <View style={styles.container}>
-      <Pressable
-        onPress={toggle}
-        style={[styles.button, { backgroundColor: theme.primaryColor }]}
-      >
-        <Text style={styles.buttonText}>💬</Text>
-      </Pressable>
+      {buttonComponent ? (
+        // consumer provides their own full button
+        buttonComponent(toggle)
+      ) : (
+        // fallback to default floating button
+        <Pressable
+          onPress={toggle}
+          style={[
+            styles.button,
+            { backgroundColor: theme.primaryColor },
+            buttonStyle,
+          ]}
+        >
+          {button ?? <DefaultButton />}
+        </Pressable>
+      )}
 
-      {open && <ChatWindow chatId={chatId} defaultMode={defaultMode} />}
+      {open && <ChatWindow chatIdProp={chatId} defaultMode={defaultMode} />}
     </View>
   );
 };
@@ -52,4 +71,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+
 export default ChatLauncher;

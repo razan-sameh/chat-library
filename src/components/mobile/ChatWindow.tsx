@@ -6,22 +6,28 @@ import { InputBox } from "./InputBox";
 import { MessageList } from "./MessageList";
 
 type Props = {
-  chatId: string;
+  route?: any;
+  chatIdProp?: string
   defaultMode?: enmMode;
 };
 
-const ChatWindow = ({ chatId, defaultMode = enmMode.popup }: Props) => {
+const ChatWindow = ({ route, defaultMode = enmMode.fullscreen , chatIdProp }: Props) => {
+  const chatId = route.params?.chatId || chatIdProp;
   const { messages, input, setInput, handleSend, userId } =
     useChatWindow(chatId);
   const theme = useChatTheme();
-    // Add error boundary for the hook
+  // Add error boundary for the hook
   if (!messages || !userId) {
     return (
-      <View style={[
-        defaultMode === enmMode.popup ? styles.popup : styles.screen,
-        { backgroundColor: theme.backgroundColor },
-      ]}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={[
+          defaultMode === enmMode.popup ? styles.popup : styles.screen,
+          { backgroundColor: theme.backgroundColor },
+        ]}
+      >
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
           {/* You might want to add a loading spinner here */}
         </View>
       </View>
@@ -60,4 +66,4 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-export default ChatWindow
+export default ChatWindow;
