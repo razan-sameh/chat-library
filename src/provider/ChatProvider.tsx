@@ -1,10 +1,10 @@
 import React, { createContext, useContext } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChatThemeProvider } from "./ChatThemeProvider.js";
-import { ChatApi, ChatUser } from "../content/types.js";
+import { ChatApi, typChatUser } from "../content/types.js";
 
 const ChatApiContext = createContext<ChatApi | null>(null);
-const ChatUserContext = createContext<ChatUser | null>(null);
+const ChatUserContext = createContext<typChatUser | null>(null);
 
 export const useChatApi = () => {
   const ctx = useContext(ChatApiContext);
@@ -19,7 +19,7 @@ export const useChatUser = () => {
 
 type ChatProviderProps = {
   api: ChatApi;
-  user: ChatUser;
+  user: typChatUser;
   queryClient?: QueryClient;
   theme?: Parameters<typeof ChatThemeProvider>[0]["theme"];
   children?: React.ReactNode;

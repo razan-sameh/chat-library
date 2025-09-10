@@ -3,11 +3,11 @@ import {
   UseMutationResult,
   useQueryClient,
 } from "@tanstack/react-query";
-import { ChatApi, Message, SendMessageInput } from "../content/types.js";
+import { ChatApi, typMessage, SendMessageInput } from "../content/types.js";
 
 const useSendMessage = (
   api: ChatApi
-): UseMutationResult<Message, Error, SendMessageInput> => {
+): UseMutationResult<typMessage, Error, SendMessageInput> => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -19,13 +19,13 @@ const useSendMessage = (
       ]);
 
       // optimistic update
-      const optimistic: Message = {
+      const optimistic: typMessage = {
         ...data,
         id: String(Date.now()),
         timestamp: Date.now(),
       };
 
-      queryClient.setQueryData<Message[]>(
+      queryClient.setQueryData<typMessage[]>(
         ["messages", { chatId: data.senderId }],
         (msgs = []) => [optimistic, ...msgs]
       );

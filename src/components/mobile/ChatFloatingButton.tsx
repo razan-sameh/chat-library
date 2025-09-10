@@ -38,7 +38,7 @@ const ChatFloatingButton = ({
           onPress={toggle}
           style={[
             styles.button,
-            { backgroundColor: theme.primaryColor },
+            { backgroundColor: theme.buttonBackgroundColor },
             buttonStyle,
           ]}
         >

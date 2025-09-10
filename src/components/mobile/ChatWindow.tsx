@@ -4,17 +4,25 @@ import { useChatTheme } from "../../provider/ChatThemeProvider";
 import { enmMode } from "../../content/enums";
 import { InputBox } from "./InputBox";
 import { MessageList } from "./MessageList";
+import { ChatHeader } from "./ChatHeader";
+import { useChatUser } from "../../provider/ChatProvider";
 
 type Props = {
   route?: any;
-  chatIdProp?: string
+  chatIdProp?: string;
   defaultMode?: enmMode;
 };
 
-const ChatWindow = ({ route, defaultMode = enmMode.fullscreen , chatIdProp }: Props) => {
+const ChatWindow = ({
+  route,
+  defaultMode = enmMode.fullscreen,
+  chatIdProp,
+}: Props) => {
   const chatId = route.params?.chatId || chatIdProp;
   const { messages, input, setInput, handleSend, userId } =
     useChatWindow(chatId);
+  const user = useChatUser();
+
   const theme = useChatTheme();
   // Add error boundary for the hook
   if (!messages || !userId) {
@@ -22,7 +30,7 @@ const ChatWindow = ({ route, defaultMode = enmMode.fullscreen , chatIdProp }: Pr
       <View
         style={[
           defaultMode === enmMode.popup ? styles.popup : styles.screen,
-          { backgroundColor: theme.backgroundColor },
+          { backgroundColor: theme.windowBackgroundColor },
         ]}
       >
         <View
@@ -38,9 +46,10 @@ const ChatWindow = ({ route, defaultMode = enmMode.fullscreen , chatIdProp }: Pr
     <View
       style={[
         defaultMode === enmMode.popup ? styles.popup : styles.screen,
-        { backgroundColor: theme.backgroundColor },
+        { backgroundColor: theme.windowBackgroundColor },
       ]}
     >
+      <ChatHeader user={user} />
       <MessageList messages={messages} userId={userId} />
       <InputBox input={input} setInput={setInput} onSend={handleSend} />
     </View>

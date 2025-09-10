@@ -15,7 +15,7 @@ module.exports = [
         file: "dist/index.web.js",
         format: "cjs",
         sourcemap: true,
-        exports: "named" // Add this
+        exports: "named"
       },
       {
         file: "dist/index.web.esm.js",
@@ -27,10 +27,11 @@ module.exports = [
       "react",
       "react-dom",
       "react-router-dom",
-      "react-router",      // add this line
+      "react-router",
       "@tanstack/react-query",
-      "@mui/material/styles"
-    ], 
+      "@mui/material/styles",
+      "react-icons"
+    ],
     plugins: [
       resolve({
         browser: true,
@@ -65,20 +66,22 @@ module.exports = [
       "react",
       "react-native",
       "@tanstack/react-query",
-      // Make sure these are also external
       "react/jsx-runtime",
-      "react-dom"
+      "react-native-vector-icons", // 👈 mark as external
+      "react-native-vector-icons/Ionicons", // 👈 mark subpath too
     ],
     plugins: [
       resolve({
         preferBuiltins: false,
         browser: false,
-        // Don't bundle React
-        dedupe: ['react', 'react-native']
+        dedupe: ["react", "react-native"],
       }),
       commonjs({
-        // Exclude React from bundling
-        exclude: ['react', 'react-native']
+        exclude: [
+          'react',
+          'react-native',
+          'react-native-vector-icons/**' // 👈 skip parsing it
+        ]
       }),
       typescript({
         tsconfig: "./tsconfig.json",

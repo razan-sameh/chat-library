@@ -19,15 +19,16 @@ export const InputBox = ({ input, setInput, onSend }: Props) => {
           flex: 1,
           padding: "6px",
           borderRadius: theme.borderRadius || "6px",
-          border: `1px solid ${theme.secondaryColor}`,
+          backgroundColor: theme.inputFieldBackground,
           outline: "none",
+          border: 0
         }}
       />
       <button
         onClick={onSend}
         style={{
           padding: "6px 12px",
-          background: theme.primaryColor,
+          background: theme.buttonBackgroundColor,
           color: "#fff",
           border: "none",
           borderRadius: theme.borderRadius || "6px",

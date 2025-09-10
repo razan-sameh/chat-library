@@ -1,7 +1,7 @@
-import { Message } from "../../content/types";
+import { typMessage } from "../../content/types";
 import { MessageBubble } from "./MessageBubble";
 
-type Props = { messages: Message[]; userId: string };
+type Props = { messages: typMessage[]; userId: string };
 
 export const MessageList = ({ messages, userId }: Props) => (
   <div style={{ flex: 1, overflowY: "auto", padding: "4px" }}>

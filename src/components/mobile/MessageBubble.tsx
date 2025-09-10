@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet } from "react-native";
 import { useChatTheme } from "../../provider/ChatThemeProvider";
-import { Message } from "../../content/types";
+import { typMessage } from "../../content/types";
 
-type Props = { message: Message; isOwn: boolean };
+type Props = { message: typMessage; isOwn: boolean };
 
 export const MessageBubble = ({ message, isOwn }: Props) => {
   const theme = useChatTheme();
@@ -17,7 +17,9 @@ export const MessageBubble = ({ message, isOwn }: Props) => {
         style={[
           styles.bubble,
           {
-            backgroundColor: isOwn ? theme.primaryColor : theme.secondaryColor,
+            backgroundColor: isOwn
+              ? theme.outputBackgroundMessage
+              : theme.inputBackgroundMessage,
             color: isOwn ? "#fff" : theme.textColor,
           },
         ]}

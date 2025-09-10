@@ -1,6 +1,8 @@
 import { enmMode } from "../../content/enums";
 import { useChatWindow } from "../../hooks/useChatWindow";
+import { useChatUser } from "../../provider/ChatProvider";
 import { useChatTheme } from "../../provider/ChatThemeProvider";
+import { ChatHeader } from "./ChatHeader";
 import { InputBox } from "./InputBox";
 import { MessageList } from "./MessageList";
 import { useParams } from "react-router-dom";
@@ -18,15 +20,15 @@ const ChatWindow = ({
   const { messages, input, setInput, handleSend, userId } = useChatWindow(
     chatId!
   );
+  const user = useChatUser();
   const theme = useChatTheme();
   const style: React.CSSProperties =
     defaultMode === enmMode.popup
       ? {
-          border: `1px solid ${theme.secondaryColor}`,
           width: "300px",
           height: "400px",
           flexDirection: "column",
-          background: theme.backgroundColor,
+          background: theme.windowBackgroundColor,
           borderRadius: theme.borderRadius || "8px",
           position: "fixed",
           bottom: "80px",
@@ -39,7 +41,7 @@ const ChatWindow = ({
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          background: theme.backgroundColor,
+          background: theme.windowBackgroundColor,
           padding: 0,
           height: "100vh",
           width: "100vw",
@@ -47,6 +49,7 @@ const ChatWindow = ({
 
   return (
     <div style={style as React.CSSProperties}>
+      <ChatHeader user={user} />
       <MessageList messages={messages} userId={userId} />
       <InputBox input={input} setInput={setInput} onSend={handleSend} />
     </div>

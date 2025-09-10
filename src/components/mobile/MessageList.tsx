@@ -1,9 +1,9 @@
 import { ScrollView, StyleSheet } from "react-native";
-import { Message } from "../../content/types";
+import { typMessage } from "../../content/types";
 import { MessageBubble } from "./MessageBubble";
 
 type Props = {
-  messages: Message[];
+  messages: typMessage[];
   userId: string;
 };
 

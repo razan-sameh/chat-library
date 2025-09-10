@@ -10,16 +10,19 @@ type Props = {
 export const InputBox = ({ input, setInput, onSend }: Props) => {
   const theme = useChatTheme();
   return (
-    <View style={[styles.container, { borderTopColor: theme.secondaryColor }]}>
+    <View style={styles.container}>
       <TextInput
-        style={[styles.input, { borderColor: theme.secondaryColor }]}
+        style={[styles.input, { backgroundColor: theme.inputFieldBackground }]}
         value={input}
         onChangeText={setInput}
         placeholder="Type a message..."
       />
       <Pressable
         onPress={onSend}
-        style={[styles.button, { backgroundColor: theme.primaryColor }]}
+        style={[
+          styles.button,
+          { backgroundColor: theme.buttonBackgroundColor },
+        ]}
       >
         <Text style={styles.buttonText}>Send</Text>
       </Pressable>
@@ -28,8 +31,8 @@ export const InputBox = ({ input, setInput, onSend }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flexDirection: "row", padding: 6, borderTopWidth: 1 },
-  input: { flex: 1, borderWidth: 1, borderRadius: 6, padding: 6 },
+  container: { flexDirection: "row", padding: 6 },
+  input: { flex: 1, borderRadius: 6, padding: 6, borderWidth: 0 },
   button: {
     paddingHorizontal: 12,
     justifyContent: "center",

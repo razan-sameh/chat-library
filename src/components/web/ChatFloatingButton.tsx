@@ -48,7 +48,7 @@ const ChatFloatingButton = ({
               width: "50px",
               height: "50px",
               borderRadius: "50%",
-              backgroundColor: theme.primaryColor,
+              backgroundColor: theme.buttonBackgroundColor,
               border: "none",
               cursor: "pointer",
               display: "flex",
