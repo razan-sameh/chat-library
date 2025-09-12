@@ -1,5 +1,6 @@
 import { enmMode } from "../../content/enums";
 import { useChatWindow } from "../../hooks/useChatWindow";
+import useGetChat from "../../hooks/useChat";
 import { useChatUser } from "../../provider/ChatProvider";
 import { useChatTheme } from "../../provider/ChatThemeProvider";
 import { ChatHeader } from "./ChatHeader";
@@ -9,19 +10,40 @@ import { useParams } from "react-router-dom";
 
 type Props = {
   chatId?: string;
+  participants?: string[];
   defaultMode?: enmMode;
 };
+
 const ChatWindow = ({
   chatId: propChatId,
+  participants,
   defaultMode = enmMode.popup,
 }: Props) => {
   const { chatId: paramChatId } = useParams<{ chatId: string }>();
   const chatId = propChatId || paramChatId;
-  const { messages, input, setInput, handleSend, userId } = useChatWindow(
-    chatId!
-  );
-  const user = useChatUser();
+  console.log({chatId,propChatId,paramChatId});
+  
+  const {
+    messages,
+    input,
+    setInput,
+    handleSend,
+    userId,
+    isSending,
+    isLoading,
+    otherUser,
+    chat,
+    isError,
+  } = useChatWindow(chatId!, participants);
   const theme = useChatTheme();
+
+  if (isLoading) return <div>⏳ Preparing chat...</div>;
+
+  if (isError)
+    return <div style={{ color: "red" }}>❌ Failed to load chat</div>;
+
+  if (!chat) return <div>No chat available</div>;
+
   const style: React.CSSProperties =
     defaultMode === enmMode.popup
       ? {
@@ -49,7 +71,7 @@ const ChatWindow = ({
 
   return (
     <div style={style as React.CSSProperties}>
-      <ChatHeader user={user} />
+      <ChatHeader user={otherUser!} />
       <MessageList messages={messages} userId={userId} />
       <InputBox input={input} setInput={setInput} onSend={handleSend} />
     </div>

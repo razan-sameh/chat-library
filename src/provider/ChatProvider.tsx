@@ -19,7 +19,7 @@ export const useChatUser = () => {
 
 type ChatProviderProps = {
   api: ChatApi;
-  user: typChatUser;
+  currentUser: typChatUser;
   queryClient?: QueryClient;
   theme?: Parameters<typeof ChatThemeProvider>[0]["theme"];
   children?: React.ReactNode;
@@ -27,7 +27,7 @@ type ChatProviderProps = {
 
 const ChatProvider = ({
   api,
-  user,
+  currentUser,
   queryClient,
   theme,
   children,
@@ -42,7 +42,7 @@ const ChatProvider = ({
     <QueryClientProvider client={client}>
       <ChatThemeProvider theme={theme ?? {}}>
         <ChatApiContext.Provider value={api}>
-          <ChatUserContext.Provider value={user}>
+          <ChatUserContext.Provider value={currentUser}>
             {children}
           </ChatUserContext.Provider>
         </ChatApiContext.Provider>

@@ -1,28 +1,54 @@
-// hooks/useChatWindow.ts
 import { useState } from "react";
-import { useChatUser, useChatApi } from "../provider/ChatProvider.js";
-import useGetMessages from "./useGetMessages.js";
-import useSendMessage from "./useSendMessage.js";
+import { useChatUser, useChatApi } from "../provider/ChatProvider";
+import useChat from "./useChat";
+import useGetMessages from "./useGetMessages";
+import useParticipants from "./useParticipants";
+import useSendMessage from "./useSendMessage";
 
-export const useChatWindow = (chatId: string) => {
+export const useChatWindow = (chatId?: string, participants?: string[]) => {
   const user = useChatUser();
   const api = useChatApi();
 
-  const { data: messages = [] } = useGetMessages(api, chatId);
-  const sendMutation = useSendMessage(api);
+  if (!chatId && (!participants || participants.length === 0)) {
+    throw new Error(
+      "You must provide either chatId or participants to initialize the chat"
+    );
+  }
+
+  const { chat: activeChat, isLoading: chatLoading, isError: chatError } = useChat({
+    chatId,
+    participants,
+  });
+
+  // ✅ call hook unconditionally
+  const sendMutation = useSendMessage(api, activeChat?.id || "placeholder");
+
+  const messagesQuery = useGetMessages(api, activeChat?.id || "");
 
   const [input, setInput] = useState("");
-
   const handleSend = () => {
-    if (!input.trim()) return;
+    if (!input.trim() || !activeChat) return;
     sendMutation.mutate({
-      chatId,
+      chatId: activeChat.id,
       senderId: user.id,
-      receiverId: "server",
       text: input,
     });
     setInput("");
   };
 
-  return { messages, input, setInput, handleSend, userId: user.id };
+  const otherUser = useParticipants(activeChat);
+
+  return {
+    chat: activeChat,
+    otherUser,
+    participants: activeChat?.participants ?? [],
+    messages: messagesQuery.data ?? [],
+    input,
+    setInput,
+    handleSend,
+    userId: user.id,
+    isSending: sendMutation.isPending,
+    isLoading: chatLoading || messagesQuery.isLoading,
+    isError: chatError,
+  };
 };

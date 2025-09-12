@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { useChatWindow } from "../../hooks/useChatWindow";
 import { useChatTheme } from "../../provider/ChatThemeProvider";
 import { enmMode } from "../../content/enums";
@@ -6,23 +6,60 @@ import { InputBox } from "./InputBox";
 import { MessageList } from "./MessageList";
 import { ChatHeader } from "./ChatHeader";
 import { useChatUser } from "../../provider/ChatProvider";
+import { ActivityIndicator } from "react-native";
 
 type Props = {
   route?: any;
   chatIdProp?: string;
   defaultMode?: enmMode;
+  participants?: string[];
 };
 
 const ChatWindow = ({
   route,
   defaultMode = enmMode.fullscreen,
+  participants,
   chatIdProp,
 }: Props) => {
   const chatId = route.params?.chatId || chatIdProp;
-  const { messages, input, setInput, handleSend, userId } =
-    useChatWindow(chatId);
+  const {
+    messages,
+    input,
+    setInput,
+    handleSend,
+    userId,
+    chat,
+    isLoading,
+    isError,
+  } = useChatWindow(chatId, participants);
   const user = useChatUser();
 
+  if (isLoading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color="#000" />
+        <Text style={styles.text}>⏳ Preparing chat...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View style={styles.center}>
+        <Text style={[styles.text, { color: "red" }]}>
+          ❌ Failed to load chat
+        </Text>
+      </View>
+    );
+  }
+
+  if (!chat) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.text}>No chat available</Text>
+      </View>
+    );
+  }
   const theme = useChatTheme();
   // Add error boundary for the hook
   if (!messages || !userId) {
@@ -73,6 +110,15 @@ const styles = StyleSheet.create({
   },
   screen: {
     flex: 1,
+  },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    marginTop: 10,
+    fontSize: 16,
   },
 });
 export default ChatWindow;

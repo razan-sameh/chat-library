@@ -1,3 +1,4 @@
+// hooks/useSendMessage.ts
 import {
   useMutation,
   UseMutationResult,
@@ -6,16 +7,18 @@ import {
 import { ChatApi, typMessage, SendMessageInput } from "../content/types.js";
 
 const useSendMessage = (
-  api: ChatApi
+  api: ChatApi,
+  chatId: string
 ): UseMutationResult<typMessage, Error, SendMessageInput> => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: api.sendMessage,
     onMutate: (data) => {
-      const saved = queryClient.getQueryData([
+      // Get previous messages for rollback
+      const saved = queryClient.getQueryData<typMessage[]>([
         "messages",
-        { chatId: data.senderId },
+        { chatId },
       ]);
 
       // optimistic update
@@ -26,19 +29,16 @@ const useSendMessage = (
       };
 
       queryClient.setQueryData<typMessage[]>(
-        ["messages", { chatId: data.senderId }],
-        (msgs = []) => [optimistic, ...msgs]
+        ["messages", { chatId }],
+        (msgs = []) => [...msgs, optimistic] // append at the end
       );
 
       return () =>
-        queryClient.setQueryData(
-          ["messages", { chatId: data.senderId }],
-          saved
-        );
+        queryClient.setQueryData(["messages", { chatId }], saved);
     },
     onError: (_, __, rollback) => rollback?.(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["messages"] });
+      queryClient.invalidateQueries({ queryKey: ["messages", { chatId }] });
     },
   });
 };

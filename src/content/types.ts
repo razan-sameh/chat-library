@@ -4,6 +4,12 @@ export type typChatUser = {
   phone:typPhone
   avatar?: string;
 };
+export type typChat = {
+  id: string;
+  name?: string;
+  participants: string[]; // user ids
+  createdAt: number;
+};
 export type typPhone = {
   countryCode: string;
   countryISO: string;
@@ -14,7 +20,6 @@ export type typMessage = {
   id: string;
   chatId: string;
   senderId: string;
-  receiverId: string;
   text: string;
   timestamp: number;
 };
@@ -28,4 +33,7 @@ export interface ChatApi {
     signal?: AbortSignal
   ) => Promise<typMessage[]>;
   sendMessage: (msg: SendMessageInput) => Promise<typMessage>;
+  fetchUser: (userId: string) => Promise<typChatUser>;
+  fetchChat: (chatId: string) => Promise<typChat>;
+  createChat: (participants: string[]) => Promise<typChat>; 
 }
