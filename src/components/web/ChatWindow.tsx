@@ -20,9 +20,7 @@ const ChatWindow = ({
   defaultMode = enmMode.popup,
 }: Props) => {
   const { chatId: paramChatId } = useParams<{ chatId: string }>();
-  const chatId = propChatId || paramChatId;
-  console.log({chatId,propChatId,paramChatId});
-  
+  const chatId = propChatId || paramChatId;  
   const {
     messages,
     input,
